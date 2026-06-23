@@ -6,6 +6,9 @@ const ai = new GoogleGenAI({
 
 export async function GET() {
   return Response.json({
-    models: ["gemini-2.5-flash", "gemini-1.5-flash"]
+    availableModels: [
+      "gemini-2.5-flash",
+      "gemini-1.5-flash"
+    ]
   });
 }
