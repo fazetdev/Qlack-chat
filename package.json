@@ -1,7 +1,6 @@
 {
   "name": "qlack-chat",
   "version": "1.0.0",
-  "type": "commonjs",
   "scripts": {
     "dev": "next dev --webpack -p 3000",
     "build": "next build",

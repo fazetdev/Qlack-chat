@@ -1,0 +1,523 @@
+/* ==========================================================================
+   1. VARIABLES & RESET
+   ========================================================================== */
+
+:root {
+  --teal-primary: #14b8a6;
+  --teal-light: #99f6e4;
+  --teal-dark: #0f766e;
+
+  --bg-dark-void: #05070f;
+  --bg-cosmic-indigo: #0f172a;
+
+  --gold-primary: #d4af37;
+  --gold-light: #f0d060;
+  --gold-dark: #b8860b;
+  --gold-deep: #8b6508;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   2. BASE LAYOUT
+   ========================================================================== */
+
+body {
+  min-height: 100vh;
+  height: 100vh;
+  font-family: var(--font-sans);
+  background: radial-gradient(
+    ellipse 120% 80% at 50% 0%,
+    #0c1e24 0%,
+    var(--bg-dark-void) 60%
+  );
+  color: #f8fafc;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+/* ==========================================================================
+   3. MAIN APP WRAPPER — FULL VIEWPORT, NO SCROLL
+   ========================================================================== */
+
+.app {
+  width: 100%;
+  max-width: 820px;
+  height: 100vh;
+  max-height: 900px;
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   4. HERO SECTION (CENTER FOCUS ORB WITH GOLD ACCENTS)
+   ========================================================================== */
+
+.hero {
+  text-align: center;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+.orb-wrap {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 14px;
+  position: relative;
+}
+
+/* Glow aura — teal + gold mixed */
+.orb-halo {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(20, 184, 166, 0.35),
+    rgba(212, 175, 55, 0.15),
+    transparent 70%
+  );
+  filter: blur(12px);
+  animation: glowPulse 3.5s ease-in-out infinite;
+}
+
+/* Gold ring outer */
+.orb-ring-gold {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
+}
+
+/* Teal ring inner */
+.orb-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(20, 184, 166, 0.2);
+}
+
+/* Core orb — teal with gold rim */
+.orb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    var(--teal-light),
+    var(--teal-primary) 55%,
+    var(--teal-dark)
+  );
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  box-shadow:
+    0 8px 25px rgba(20, 184, 166, 0.4),
+    0 0 50px rgba(20, 184, 166, 0.2),
+    inset 0 -4px 20px rgba(212, 175, 55, 0.15);
+  animation: orbPulse 3.5s ease-in-out infinite;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  user-select: none;
+}
+
+/* Gold shimmer overlay on orb */
+.orb::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(212, 175, 55, 0.15) 50%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Titles */
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff, var(--teal-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+}
+
+.hero p {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   5. CHAT CONTAINER (MAIN STAGE)
+   ========================================================================== */
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: rgba(17, 24, 39, 0.78);
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-radius: 20px;
+  padding: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+  min-height: 0;
+}
+
+/* CHAT BOX */
+#chat-box {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 4px;
+  min-height: 0;
+}
+
+/* scrollbar */
+#chat-box::-webkit-scrollbar {
+  width: 4px;
+}
+#chat-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+#chat-box::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.2);
+  border-radius: 10px;
+}
+
+/* ==========================================================================
+   6. CHAT BUBBLES & CARDS
+   ========================================================================== */
+
+.message, .ai-card {
+  max-width: 80%;
+  line-height: 1.55;
+  font-size: 0.92rem;
+  word-wrap: break-word;
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* USER (GOLD IDENTITY) */
+.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+  color: #0b0b0b;
+  border-bottom-right-radius: 4px;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(212,175,55,0.18);
+}
+
+/* AI RESPONSES / CARDS (WHITE FOCUS ZONE) */
+.ai, .ai-card {
+  align-self: flex-start;
+  background: #ffffff;
+  color: #0b0b0b;
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+}
+
+.ai-card {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.ai-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: #64748b;
+  padding: 10px 14px 2px;
+}
+
+.ai-body {
+  padding: 0 14px 12px;
+}
+
+/* ==========================================================================
+   7. SUGGESTION CHIPS — GOLD ACCENTED
+   ========================================================================== */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 2px 0;
+}
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  user-select: none;
+  font-family: var(--font-sans);
+}
+
+.chip:hover {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.35);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.08);
+}
+
+.chip:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   8. INPUT AREA — GOLD ACCENTED
+   ========================================================================== */
+
+.input-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  background: #000000;
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 14px;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+#message {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,55,0.15);
+  background: #0a0c12;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition-smooth);
+  min-width: 0;
+  width: 100%;
+}
+
+#message:focus {
+  border-color: rgba(212,175,55,0.5);
+  box-shadow: 0 0 0 2px rgba(212,175,55,0.1);
+}
+
+#message::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+#send-btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#send-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(212,175,55,0.3);
+}
+
+#send-btn:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   9. ANIMATIONS
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* ==========================================================================
+   10. RESPONSIVE — MOBILE FIRST
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  .app {
+    padding: 12px 12px 16px;
+    gap: 12px;
+    max-height: 100vh;
+  }
+
+  .orb-wrap {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 10px;
+  }
+
+  .orb {
+    width: 72px;
+    height: 72px;
+    font-size: 1.8rem;
+  }
+
+  .orb-halo {
+    inset: -14px;
+  }
+
+  .orb-ring-gold {
+    inset: -10px;
+  }
+
+  .orb-ring {
+    inset: -4px;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero p {
+    font-size: 0.75rem;
+  }
+
+  .chat-container {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .message, .ai-card {
+    max-width: 90%;
+    font-size: 0.85rem;
+  }
+
+  .message {
+    padding: 8px 12px;
+  }
+
+  .ai-title {
+    font-size: 0.65rem;
+    padding: 8px 12px 2px;
+  }
+
+  .ai-body {
+    padding: 0 12px 10px;
+  }
+
+  .chips {
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .chip {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+  }
+
+  .input-box {
+    padding: 6px;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  #message {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  #send-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .orb-wrap {
+    width: 60px;
+    height: 60px;
+  }
+
+  .orb {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: 1.3rem;
+  }
+
+  .chat-container {
+    padding: 10px;
+  }
+
+  .chip {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+}
