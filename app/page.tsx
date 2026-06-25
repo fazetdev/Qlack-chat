@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const styles = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html, body {
     height: 100%;
     overflow: hidden;
@@ -215,6 +214,7 @@ const styles = `
   .ai-body, .user-body {
     font-size: 1rem;
     line-height: 1.6;
+    white-space: pre-wrap;
   }
 
   @keyframes fadeIn {
@@ -273,6 +273,13 @@ const styles = `
     box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
   }
 
+  .input-box button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
   .input-box button:active {
     transform: translateY(0);
   }
@@ -289,8 +296,66 @@ const styles = `
   }
 `;
 
+interface ChatMessage {
+  id: string;
+  sender: "user" | "ai";
+  text: string;
+}
+
 export default function Home() {
   const [message, setMessage] = useState("");
+  const [history, setHistory] = useState<ChatMessage[]>([
+    {
+      id: "welcome",
+      sender: "ai",
+      text: "Hi! I'm here to answer any questions about Qlack.",
+    },
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSend = async () => {
+    if (!message.trim() || isLoading) return;
+
+    const userText = message.trim();
+    setMessage(""); // Clear input right away for smooth UX
+
+    // 1. Add User message to state stream
+    const userMsg: ChatMessage = {
+      id: Math.random().toString(),
+      sender: "user",
+      text: userText,
+    };
+    setHistory((prev) => [...prev, userMsg]);
+    setIsLoading(true);
+
+    try {
+      // 2. Fire Request to Next.js API endpoint Route
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      const data = await res.json();
+
+      // 3. Mount Response Stream to UI
+      const aiMsg: ChatMessage = {
+        id: Math.random().toString(),
+        sender: "ai",
+        text: data.reply || data.error || "No response received.",
+      };
+      setHistory((prev) => [...prev, aiMsg]);
+    } catch (err: any) {
+      const errorMsg: ChatMessage = {
+        id: Math.random().toString(),
+        sender: "ai",
+        text: `Connection failed: ${err?.message || String(err)}`,
+      };
+      setHistory((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -311,13 +376,25 @@ export default function Home() {
         {/* CHAT */}
         <section className="chat-container">
           <div id="chat-box">
-            {/* System Message */}
-            <div className="ai-card">
-              <div className="ai-title">Q-BOT</div>
-              <div className="ai-body">
-                Hi! I'm here to answer any questions about Qlack.?
+            {history.map((msg) => (
+              <div
+                key={msg.id}
+                className={msg.sender === "user" ? "user-card" : "ai-card"}
+              >
+                <div className={msg.sender === "user" ? "user-title" : "ai-title"}>
+                  {msg.sender === "user" ? "YOU" : "Q-BOT"}
+                </div>
+                <div className={msg.sender === "user" ? "user-body" : "ai-body"}>
+                  {msg.text}
+                </div>
               </div>
-            </div>
+            ))}
+            {isLoading && (
+              <div className="ai-card">
+                <div className="ai-title">Q-BOT</div>
+                <div className="ai-body">Thinking...</div>
+              </div>
+            )}
           </div>
 
           <div className="input-box">
@@ -326,9 +403,13 @@ export default function Home() {
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
               placeholder="Ask Qlack..."
+              disabled={isLoading}
             />
-            <button id="send-btn">Send</button>
+            <button id="send-btn" onClick={handleSend} disabled={isLoading}>
+              {isLoading ? "..." : "Send"}
+            </button>
           </div>
         </section>
       </main>
