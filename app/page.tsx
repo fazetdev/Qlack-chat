@@ -385,34 +385,34 @@ export default function Home() {
   return (
     <>
       <style>{styles}</style>
-      <div class="app">
+      <div className="app">
         
-        <header class="hero">
-          <div class="orb-wrap">
-            <div class="orb-halo"></div>
-            <div class="orb-ring-gold"></div>
-            <div class="orb-ring"></div>
-            <div class="orb">Q</div>
+        <header className="hero">
+          <div className="orb-wrap">
+            <div className="orb-halo"></div>
+            <div className="orb-ring-gold"></div>
+            <div className="orb-ring"></div>
+            <div className="orb">Q</div>
           </div>
           <h1>Q-BOT</h1>
           <h3>Ask anything about Qlack</h3>
         </header>
 
-        <main class="chat-container">
+        <main className="chat-container">
           <div id="chat-box">
             {history.map((msg) => (
-              <div key={msg.id} class={msg.sender === "user" ? "user-card" : "ai-card"}>
-                <div class={msg.sender === "user" ? "user-title" : "ai-title"}>
+              <div key={msg.id} className={msg.sender === "user" ? "user-card" : "ai-card"}>
+                <div className={msg.sender === "user" ? "user-title" : "ai-title"}>
                   {msg.sender === "user" ? "You" : "Q-BOT"}
                 </div>
-                <div class={msg.sender === "user" ? "user-body" : "ai-body"}>
+                <div className={msg.sender === "user" ? "user-body" : "ai-body"}>
                   {msg.text}
                 </div>
               </div>
             ))}
           </div>
 
-          <div class="command-deck">
+          <div className="command-deck">
             <textarea
               id="message"
               rows={1}
@@ -422,8 +422,8 @@ export default function Home() {
               placeholder="Ask Qlack..."
               disabled={isLoading}
             />
-            <div class="action-row">
-              <div class="button-group">
+            <div className="action-row">
+              <div className="button-group">
                 <button id="mic-btn" type="button" title="Voice Input">🎤</button>
                 <button 
                   id="send-btn" 
