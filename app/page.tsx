@@ -24,25 +24,25 @@ const styles = `
     display: flex;
     flex-direction: column;
     height: 100vh;
-    height: 100dvh; /* Dynamic viewport for clean mobile layout */
+    height: 100dvh; /* Dynamic mobile viewport tracking */
     overflow: hidden;
-    max-width: 440px; /* Constrained for mobile cockpit profile */
+    max-width: 460px;
     margin: 0 auto;
-    padding: 16px;
+    padding: 12px;
   }
 
   /* ── HERO ── */
   .hero {
     flex-shrink: 0;
     text-align: center;
-    padding: 4px 0 12px;
+    padding: 8px 0 12px;
   }
 
   .orb-wrap {
     position: relative;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 8px;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,7 +50,7 @@ const styles = `
 
   .orb-halo {
     position: absolute;
-    inset: -14px;
+    inset: -12px;
     border-radius: 50%;
     background: radial-gradient(
       circle,
@@ -64,7 +64,7 @@ const styles = `
 
   .orb-ring-gold {
     position: absolute;
-    inset: -8px;
+    inset: -6px;
     border-radius: 50%;
     border: 2px solid rgba(212, 175, 55, 0.2);
     animation: spin 10s linear infinite reverse;
@@ -72,15 +72,15 @@ const styles = `
 
   .orb-ring {
     position: absolute;
-    inset: -3px;
+    inset: -2px;
     border-radius: 50%;
     border: 1px solid rgba(20, 184, 166, 0.15);
     animation: spin 6s linear infinite;
   }
 
   .orb {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: radial-gradient(
       circle at 35% 35%,
@@ -91,78 +91,62 @@ const styles = `
     border: 2px solid rgba(212, 175, 55, 0.35);
     box-shadow:
       0 6px 20px rgba(20, 184, 166, 0.35),
-      0 0 40px rgba(20, 184, 166, 0.15),
       inset 0 -4px 16px rgba(212, 175, 55, 0.1);
-    animation: orbPulse 3.5s ease-in-out infinite;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #fff;
-    text-shadow: 0 2px 16px rgba(0,0,0,0.3);
-    position: relative;
-    z-index: 2;
   }
 
   @keyframes spin {
     to { transform: rotate(360deg); }
   }
 
-  @keyframes orbPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
-  }
-
   @keyframes glowPulse {
     0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.08); }
+    50% { opacity: 0.8; transform: scale(1.06); }
   }
 
   .hero h1 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     background: linear-gradient(135deg, #ffffff, #99f6e4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .hero h3 {
-    font-size: 0.95rem;
-    margin-top: 4px;
-    letter-spacing: 0.04em;
+    font-size: 0.88rem;
+    margin-top: 2px;
     font-weight: 600;
-    background: linear-gradient(135deg, #f3e5ab, #d4af37, #aa7c11);
+    background: linear-gradient(135deg, #f3e5ab, #d4af37);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
-  /* ── CHAT CONTAINER (DYNAMIC WHITE COCKPIT) ── */
+  /* ── FLUID WHITE CONTAINER (OPTIMIZED FOR HEIGHT SAVINGS) ── */
   .chat-container {
-    flex: 1 1 0;
-    min-height: 260px;
-    max-height: 65vh;
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 24px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    transition: height 0.2s ease;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
   }
 
   #chat-box {
-    flex: 1 1 0;
+    flex: 1;
     min-height: 0;
     overflow-y: auto;
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   #chat-box::-webkit-scrollbar {
@@ -170,21 +154,21 @@ const styles = `
   }
   #chat-box::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 4px;
   }
 
-  /* ── CARDS (AI & USER) ── */
+  /* ── MESSAGE BUBBLES ── */
   .ai-card, .user-card {
-    max-width: 90%;
-    padding: 12px 16px;
-    animation: fadeIn 0.2s ease-out;
+    max-width: 85%;
+    padding: 10px 14px;
+    animation: fadeIn 0.15s ease-out;
   }
 
   .ai-card {
     align-self: flex-start;
-    background: #f0f4f9;
-    color: #1e293b;
-    border-radius: 16px;
+    background: #f1f5f9;
+    color: #0f172a;
+    border-radius: 14px 14px 14px 4px;
   }
 
   .user-card {
@@ -192,128 +176,86 @@ const styles = `
     background: #c6941f;
     color: #000000;
     font-weight: 600;
-    border-radius: 16px;
+    border-radius: 14px 14px 4px 14px;
   }
 
-  .ai-title, .user-title {
+  .ai-title {
     font-size: 0.7rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     font-weight: 700;
-    margin-bottom: 4px;
+    color: #64748b;
+    margin-bottom: 3px;
   }
 
-  .ai-title { color: #556987; }
-  .user-title { color: #000000; opacity: 0.6; text-align: right; display: none; }
-
   .ai-body, .user-body {
-    font-size: 0.92rem;
-    line-height: 1.45;
+    font-size: 0.9rem;
+    line-height: 1.4;
     white-space: pre-wrap;
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── CLEAN WHITE COMMAND DECK (INPUT SEPARATED, ACTIONS TIGHTLY GROUPED) ── */
+  /* ── SIDE-BY-SIDE INTEGRATED INPUT BAR (SPEAKER REMOVED) ── */
   .command-deck {
     background: #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 12px 16px 16px;
+    padding: 10px 12px;
     border-top: 1px solid #f1f5f9;
-  }
-
-  /* Solid Stark Black Input Window Box */
-  .command-deck textarea {
-    width: 100%;
-    background: #090d16;
-    border: 1px solid #1e293b;
-    border-radius: 12px;
-    outline: none;
-    color: #ffffff;
-    font-family: inherit;
-    font-size: 0.92rem;
-    padding: 12px;
-    resize: none;
-    line-height: 1.45;
-    transition: all 0.2s ease;
-  }
-
-  .command-deck textarea:focus {
-    border-color: rgba(198, 148, 31, 0.6);
-  }
-
-  .command-deck textarea::placeholder {
-    color: #64748b;
-  }
-
-  .action-row {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  .button-group {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  /* 🎤 High-contrast Speaker Button */
-  #mic-btn {
-    height: 40px;
-    width: 40px;
-    font-size: 1.15rem;
+  /* Clean full-width dark input styling */
+  .command-deck textarea {
+    flex: 1;
+    background: #090d16;
+    border: 1px solid #1e293b;
     border-radius: 10px;
-    border: none;
-    background: #1e293b;
+    outline: none;
     color: #ffffff;
+    font-family: inherit;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    resize: none;
+    line-height: 1.35;
+    height: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   }
 
-  #mic-btn:hover {
-    background: #0f172a;
-    transform: translateY(-1px);
+  .command-deck textarea:focus {
+    border-color: #c6941f;
   }
 
-  /* Gold Send Button */
+  .command-deck textarea::placeholder {
+    color: #475569;
+  }
+
+  /* Compact inline send button */
   #send-btn {
     height: 40px;
-    padding: 0 22px;
+    padding: 0 18px;
     border-radius: 10px;
     border: none;
     background: #c6941f;
     color: #000000;
     font-weight: 700;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: background 0.15s ease;
   }
 
   #send-btn:hover {
     background: #e0a92a;
-    transform: translateY(-1px);
   }
 
   #send-btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-  }
-
-  #send-btn:active, #mic-btn:active {
-    transform: scale(0.97);
   }
 `;
 
@@ -394,17 +336,15 @@ export default function Home() {
             <div className="orb-ring"></div>
             <div className="orb">Q</div>
           </div>
-          <h1>Q-BOT</h1>
-          <h3>Ask anything about Qlack</h3>
+          <h1>Fazet AI</h1>
+          <h3>Intelligent Knowledge Assistant</h3>
         </header>
 
         <main className="chat-container">
           <div id="chat-box">
             {history.map((msg) => (
               <div key={msg.id} className={msg.sender === "user" ? "user-card" : "ai-card"}>
-                <div className={msg.sender === "user" ? "user-title" : "ai-title"}>
-                  {msg.sender === "user" ? "You" : "Q-BOT"}
-                </div>
+                {msg.sender !== "user" && <div className="ai-title">Fazet AI</div>}
                 <div className={msg.sender === "user" ? "user-body" : "ai-body"}>
                   {msg.text}
                 </div>
@@ -419,22 +359,17 @@ export default function Home() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask Qlack..."
+              placeholder="Ask anything about Fazet..."
               disabled={isLoading}
             />
-            <div className="action-row">
-              <div className="button-group">
-                <button id="mic-btn" type="button" title="Voice Input">🎤</button>
-                <button 
-                  id="send-btn" 
-                  type="button" 
-                  onClick={handleSend}
-                  disabled={isLoading || !message.trim()}
-                >
-                  Send
-                </button>
-              </div>
-            </div>
+            <button 
+              id="send-btn" 
+              type="button" 
+              onClick={handleSend}
+              disabled={isLoading || !message.trim()}
+            >
+              Send
+            </button>
           </div>
 
         </main>
