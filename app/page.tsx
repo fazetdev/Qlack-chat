@@ -24,25 +24,26 @@ const styles = `
     display: flex;
     flex-direction: column;
     height: 100vh;
-    height: 100dvh; /* Dynamic mobile viewport tracking */
+    height: 100dvh;
     overflow: hidden;
     max-width: 440px;
     margin: 0 auto;
-    padding: 12px;
+    padding: 24px 16px;
+    justify-content: center; /* Centers the card perfectly like Fazet */
   }
 
   /* ── HERO ── */
   .hero {
     flex-shrink: 0;
     text-align: center;
-    padding: 8px 0 12px;
+    padding-bottom: 20px;
   }
 
   .orb-wrap {
     position: relative;
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 6px;
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,7 +51,7 @@ const styles = `
 
   .orb-halo {
     position: absolute;
-    inset: -12px;
+    inset: -14px;
     border-radius: 50%;
     background: radial-gradient(
       circle,
@@ -64,7 +65,7 @@ const styles = `
 
   .orb-ring-gold {
     position: absolute;
-    inset: -6px;
+    inset: -8px;
     border-radius: 50%;
     border: 2px solid rgba(212, 175, 55, 0.2);
     animation: spin 10s linear infinite reverse;
@@ -72,15 +73,15 @@ const styles = `
 
   .orb-ring {
     position: absolute;
-    inset: -2px;
+    inset: -3px;
     border-radius: 50%;
     border: 1px solid rgba(20, 184, 166, 0.15);
     animation: spin 6s linear infinite;
   }
 
   .orb {
-    width: 56px;
-    height: 56px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
     background: radial-gradient(
       circle at 35% 35%,
@@ -95,7 +96,7 @@ const styles = `
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: 800;
     color: #fff;
   }
@@ -110,65 +111,67 @@ const styles = `
   }
 
   .hero h1 {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 800;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
     background: linear-gradient(135deg, #ffffff, #99f6e4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
   }
 
   .hero h3 {
-    font-size: 0.88rem;
-    margin-top: 2px;
+    font-size: 0.95rem;
     font-weight: 600;
+    letter-spacing: 0.02em;
     background: linear-gradient(135deg, #f3e5ab, #d4af37);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  /* ── CLOSED GAP COCKPIT CARD CONTAINER ── */
+  /* ── FIXED FAZET-STYLE CONTAINER COCKPIT ── */
   .chat-container {
-    flex: 1;
-    min-height: 0;
     display: flex;
     flex-direction: column;
     background: #ffffff;
-    border-radius: 20px;
+    border-radius: 28px;
     overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    max-height: 480px; /* Constrains vertical footprint precisely matching Fazet profile */
+    width: 100%;
   }
 
   #chat-box {
     flex: 1;
-    min-height: 0;
     overflow-y: auto;
-    padding: 14px 14px 4px 14px; /* Tight bottom padding removes blank spacing */
+    padding: 20px 20px 10px 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   #chat-box::-webkit-scrollbar {
     width: 4px;
   }
   #chat-box::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
   }
 
-  /* ── MESSAGE BUBBLES ── */
+  /* ── MESSAGE CARDS ── */
   .ai-card, .user-card {
-    max-width: 85%;
-    padding: 10px 14px;
-    animation: fadeIn 0.15s ease-out;
+    max-width: 88%;
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
   }
 
   .ai-card {
     align-self: flex-start;
-    background: #f1f5f9;
-    color: #0f172a;
-    border-radius: 14px 14px 14px 4px;
+    background: #f0f4f8;
+    color: #1e293b;
+    border-radius: 18px;
   }
 
   .user-card {
@@ -176,54 +179,48 @@ const styles = `
     background: #c6941f;
     color: #000000;
     font-weight: 600;
-    border-radius: 14px 14px 4px 14px;
+    border-radius: 18px;
   }
 
   .ai-title {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     font-weight: 700;
     color: #64748b;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
   }
 
-  .ai-body, .user-body {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    white-space: pre-wrap;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ── INLINE BOTTOM DECK (TIGHT INTEGRATION) ── */
+  /* ── TWO-TIER FAZET COMMAND DECK ── */
   .command-deck {
     background: #ffffff;
-    padding: 8px 12px 12px;
-    border-top: 1px solid #f1f5f9;
+    padding: 0 20px 20px 20px;
     display: flex;
-    align-items: flex-end; /* Base alignment handles auto-expanding sizes gracefully */
-    gap: 8px;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  /* Expandable inline clean text input box */
+  /* Separate full-width standalone block input row */
+  .input-row {
+    width: 100%;
+  }
+
   .command-deck textarea {
-    flex: 1;
+    width: 100%;
     background: #090d16;
-    border: 1px solid #1e293b;
-    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
     outline: none;
     color: #ffffff;
     font-family: inherit;
-    font-size: 0.9rem;
-    padding: 10px 12px;
+    font-size: 0.92rem;
+    padding: 14px 16px;
     resize: none;
-    line-height: 1.35;
-    min-height: 40px;
-    max-height: 120px; /* Restricts maximum expansion size on typing overload */
+    line-height: 1.4;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    transition: border-color 0.15s ease;
   }
 
   .command-deck textarea:focus {
@@ -234,21 +231,50 @@ const styles = `
     color: #475569;
   }
 
-  /* Compact inline gold click target button */
+  /* Control line grouped nicely underneath to the right side */
+  .action-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #mic-btn {
+    height: 42px;
+    width: 42px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: none;
+    background: #1e293b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  #mic-btn:hover {
+    background: #0f172a;
+  }
+
   #send-btn {
-    height: 40px;
-    padding: 0 18px;
-    border-radius: 10px;
+    height: 42px;
+    padding: 0 24px;
+    border-radius: 12px;
     border: none;
     background: #c6941f;
     color: #000000;
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     cursor: pointer;
     transition: background 0.15s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   #send-btn:hover {
@@ -326,13 +352,6 @@ export default function Home() {
     }
   };
 
-  // Automated textarea expansion tracker mimicking premium interfaces
-  const handleTextareaChange = (e: any) => {
-    setMessage(e.target.value);
-    e.target.style.height = "auto";
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
-  };
-
   return (
     <>
       <style>{styles}</style>
@@ -362,23 +381,30 @@ export default function Home() {
           </div>
 
           <div className="command-deck">
-            <textarea
-              id="message"
-              rows={1}
-              value={message}
-              onChange={handleTextareaChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask Qlack..."
-              disabled={isLoading}
-            />
-            <button 
-              id="send-btn" 
-              type="button" 
-              onClick={handleSend}
-              disabled={isLoading || !message.trim()}
-            >
-              Send
-            </button>
+            <div className="input-row">
+              <textarea
+                id="message"
+                rows={1}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask Qlack..."
+                disabled={isLoading}
+              />
+            </div>
+            <div className="action-row">
+              <div className="button-group">
+                <button id="mic-btn" type="button" title="Voice Input">🎤</button>
+                <button 
+                  id="send-btn" 
+                  type="button" 
+                  onClick={handleSend}
+                  disabled={isLoading || !message.trim()}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
 
         </main>
