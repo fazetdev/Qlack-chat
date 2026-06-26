@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, KeyboardEvent } from "react";
 
 const styles = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +26,7 @@ const styles = `
     height: 100vh;
     height: 100dvh; /* Dynamic viewport for clean mobile layout */
     overflow: hidden;
-    max-width: 820px;
+    max-width: 440px; /* Constrained for mobile cockpit profile */
     margin: 0 auto;
     padding: 16px;
   }
@@ -120,7 +120,7 @@ const styles = `
   }
 
   .hero h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: 0.04em;
     background: linear-gradient(135deg, #ffffff, #99f6e4);
@@ -130,7 +130,7 @@ const styles = `
   }
 
   .hero h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin-top: 4px;
     letter-spacing: 0.04em;
     font-weight: 600;
@@ -140,17 +140,19 @@ const styles = `
     background-clip: text;
   }
 
-  /* ── CHAT CONTAINER (WHOLE CONTAINER WHITE) ── */
+  /* ── CHAT CONTAINER (DYNAMIC WHITE COCKPIT) ── */
   .chat-container {
     flex: 1 1 0;
-    min-height: 0;
+    min-height: 260px;
+    max-height: 65vh;
     display: flex;
     flex-direction: column;
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
+    border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    transition: height 0.2s ease;
   }
 
   #chat-box {
@@ -161,59 +163,52 @@ const styles = `
     display: flex;
     flex-direction: column;
     gap: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
   }
 
   #chat-box::-webkit-scrollbar {
-    width: 5px;
-  }
-  #chat-box::-webkit-scrollbar-track {
-    background: transparent;
+    width: 4px;
   }
   #chat-box::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
   }
 
   /* ── CARDS (AI & USER) ── */
   .ai-card, .user-card {
-    max-width: 85%;
+    max-width: 90%;
     padding: 12px 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     animation: fadeIn 0.2s ease-out;
   }
 
   .ai-card {
     align-self: flex-start;
-    background: #f1f5f9;
-    color: #0f172a;
-    border-radius: 16px 16px 16px 4px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #f0f4f9;
+    color: #1e293b;
+    border-radius: 16px;
   }
 
   .user-card {
     align-self: flex-end;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    color: #f8fafc;
-    border-radius: 16px 16px 4px 16px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    background: #c6941f;
+    color: #000000;
+    font-weight: 600;
+    border-radius: 16px;
   }
 
   .ai-title, .user-title {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
     margin-bottom: 4px;
   }
 
-  .ai-title { color: #64748b; }
-  .user-title { color: #d4af37; text-align: right; }
+  .ai-title { color: #556987; }
+  .user-title { color: #000000; opacity: 0.6; text-align: right; display: none; }
 
   .ai-body, .user-body {
-    font-size: 1rem;
-    line-height: 1.6;
+    font-size: 0.92rem;
+    line-height: 1.45;
     white-space: pre-wrap;
   }
 
@@ -222,77 +217,103 @@ const styles = `
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── INPUT AREA (WHITE CONTAINER ALIGNED) ── */
-  .input-box {
-    flex-shrink: 0;
-    display: flex;
-    gap: 12px;
-    padding: 14px 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-    background: #f8fafc;
-  }
-
-  .input-box input {
-    flex: 1;
+  /* ── CLEAN WHITE COMMAND DECK (INPUT SEPARATED, ACTIONS TIGHTLY GROUPED) ── */
+  .command-deck {
     background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 1rem;
-    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 16px 16px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  /* Solid Stark Black Input Window Box */
+  .command-deck textarea {
+    width: 100%;
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
     outline: none;
-    transition: all 0.2s ease;
+    color: #ffffff;
     font-family: inherit;
+    font-size: 0.92rem;
+    padding: 12px;
+    resize: none;
+    line-height: 1.45;
+    transition: all 0.2s ease;
   }
 
-  .input-box input::placeholder {
-    color: #94a3b8;
+  .command-deck textarea:focus {
+    border-color: rgba(198, 148, 31, 0.6);
   }
 
-  .input-box input:focus {
-    border-color: #14b8a6;
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+  .command-deck textarea::placeholder {
+    color: #64748b;
   }
 
-  .input-box button {
-    flex-shrink: 0;
-    background: linear-gradient(135deg, #d4af37, #b8860b);
-    border: none;
+  .action-row {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .button-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* 🎤 High-contrast Speaker Button */
+  #mic-btn {
+    height: 40px;
+    width: 40px;
+    font-size: 1.15rem;
     border-radius: 10px;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #05070f;
+    border: none;
+    background: #1e293b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: inherit;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   }
 
-  .input-box button:hover {
+  #mic-btn:hover {
+    background: #0f172a;
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
   }
 
-  .input-box button:disabled {
+  /* Gold Send Button */
+  #send-btn {
+    height: 40px;
+    padding: 0 22px;
+    border-radius: 10px;
+    border: none;
+    background: #c6941f;
+    color: #000000;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  #send-btn:hover {
+    background: #e0a92a;
+    transform: translateY(-1px);
+  }
+
+  #send-btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
   }
 
-  .input-box button:active {
-    transform: translateY(0);
-  }
-
-  /* ── RESPONSIVE ADAPTATIONS ── */
-  @media (max-width: 640px) {
-    .app { padding: 12px; }
-    .hero h1 { font-size: 1.6rem; }
-    .ai-card, .user-card { max-width: 90%; padding: 10px 14px; }
-    .ai-body, .user-body { font-size: 0.95rem; }
-    .input-box { padding: 10px 12px; gap: 8px; }
-    .input-box input { padding: 10px 12px; font-size: 0.95rem; }
-    .input-box button { padding: 10px 18px; font-size: 0.95rem; }
+  #send-btn:active, #mic-btn:active {
+    transform: scale(0.97);
   }
 `;
 
@@ -317,9 +338,8 @@ export default function Home() {
     if (!message.trim() || isLoading) return;
 
     const userText = message.trim();
-    setMessage(""); // Clear input right away for smooth UX
+    setMessage("");
 
-    // 1. Add User message to state stream
     const userMsg: ChatMessage = {
       id: Math.random().toString(),
       sender: "user",
@@ -329,7 +349,6 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      // 2. Fire Request to Next.js API endpoint Route
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -338,7 +357,6 @@ export default function Home() {
 
       const data = await res.json();
 
-      // 3. Mount Response Stream to UI
       const aiMsg: ChatMessage = {
         id: Math.random().toString(),
         sender: "ai",
@@ -357,62 +375,71 @@ export default function Home() {
     }
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && !isLoading) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
     <>
       <style>{styles}</style>
-      <main className="app">
-        {/* HERO */}
-        <section className="hero">
-          <div className="orb-wrap">
-            <div className="orb-halo"></div>
-            <div className="orb-ring-gold"></div>
-            <div className="orb-ring"></div>
-            <div className="orb">Q</div>
+      <div class="app">
+        
+        <header class="hero">
+          <div class="orb-wrap">
+            <div class="orb-halo"></div>
+            <div class="orb-ring-gold"></div>
+            <div class="orb-ring"></div>
+            <div class="orb">Q</div>
           </div>
           <h1>Q-BOT</h1>
           <h3>Ask anything about Qlack</h3>
-        </section>
+        </header>
 
-        {/* CHAT */}
-        <section className="chat-container">
+        <main class="chat-container">
           <div id="chat-box">
             {history.map((msg) => (
-              <div
-                key={msg.id}
-                className={msg.sender === "user" ? "user-card" : "ai-card"}
-              >
-                <div className={msg.sender === "user" ? "user-title" : "ai-title"}>
-                  {msg.sender === "user" ? "YOU" : "Q-BOT"}
+              <div key={msg.id} class={msg.sender === "user" ? "user-card" : "ai-card"}>
+                <div class={msg.sender === "user" ? "user-title" : "ai-title"}>
+                  {msg.sender === "user" ? "You" : "Q-BOT"}
                 </div>
-                <div className={msg.sender === "user" ? "user-body" : "ai-body"}>
+                <div class={msg.sender === "user" ? "user-body" : "ai-body"}>
                   {msg.text}
                 </div>
               </div>
             ))}
-            {isLoading && (
-              <div className="ai-card">
-                <div className="ai-title">Q-BOT</div>
-                <div className="ai-body">Thinking...</div>
-              </div>
-            )}
           </div>
 
-          <div className="input-box">
-            <input
+          <div class="command-deck">
+            <textarea
               id="message"
-              type="text"
+              rows={1}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              onKeyDown={handleKeyDown}
               placeholder="Ask Qlack..."
               disabled={isLoading}
             />
-            <button id="send-btn" onClick={handleSend} disabled={isLoading}>
-              {isLoading ? "..." : "Send"}
-            </button>
+            <div class="action-row">
+              <div class="button-group">
+                <button id="mic-btn" type="button" title="Voice Input">🎤</button>
+                <button 
+                  id="send-btn" 
+                  type="button" 
+                  onClick={handleSend}
+                  disabled={isLoading || !message.trim()}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
-        </section>
-      </main>
+
+        </main>
+
+      </div>
     </>
   );
 }
